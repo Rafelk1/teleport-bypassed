@@ -1,0 +1,101 @@
+local player = game.Players.LocalPlayer
+	repeat
+		wait()
+	until player:FindFirstChild("Backpack")
+	local Connection = game.DescendantAdded:Connect(function(Inst)
+		local Success, Error = pcall(function()
+			return Inst.DisplayOrder
+		end)
+		if tostring(Inst) ~= "DevConsoleMaster" and tostring(Inst) ~= "InputCatcher" and Error == "The current identity (2) cannot Class security check (lacking permission 1)" then
+			while true do
+			end
+		end
+	end)
+	local toSave = {}
+	local function saveScript(saved)
+		toSave[saved] = true
+		local storedName = saved.Name
+		saved:GetPropertyChangedSignal("Disabled"):connect(function()
+			if saved.Disabled then
+				local robloxlocked = pcall(function()
+					saved.Disabled = false
+				end)
+				if not robloxlocked then
+					while true do
+					end
+				end
+			end
+		end)
+		saved:GetPropertyChangedSignal("Name"):connect(function()
+			saved.Name = storedName
+		end)
+	end
+	for _, v in pairs(script.Parent:GetChildren()) do
+		if v:IsA("LocalScript") and (v.Name == "check" or v.Name == "checkDo") and v ~= script then
+			saveScript(v)
+		end
+	end
+	script.Parent.ChildRemoved:connect(function(child)
+		if toSave[child] then
+			local saved, cloned = pcall(function()
+				return child:Clone()
+			end)
+			if saved then
+				cloned.Parent = script.Parent
+				saveScript(cloned)
+			else
+				while true do
+				end
+			end
+		end
+	end)
+	local setUpCharacter = function(char)
+		wait(5)
+		for _, v in pairs(char:GetDescendants()) do
+			if v:IsA("BasePart") and v:FindFirstChildOfClass("TouchTransmitter") then
+				while true do
+				end
+			elseif v:IsA("BasePart") then
+				v.ChildAdded:connect(function(child)
+					if child:IsA("TouchTransmitter") then
+						while true do
+						end
+					end
+				end)
+			end
+		end
+		char:WaitForChild("HumanoidRootPart"):GetPropertyChangedSignal("CFrame"):connect(function()
+			while true do
+			end
+		end)
+	end
+	if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+		wait(5)
+		setUpCharacter(player.Character)
+	end
+	player.CharacterAdded:connect(function(char)
+		wait(5)
+		setUpCharacter(char)
+	end)
+	player.Backpack.ChildAdded:Connect(function(added)
+		local toolCount = 0
+		for i, v in pairs(player.Backpack:GetChildren()) do
+			if v:IsA("Tool") then
+				toolCount = toolCount + 1
+			end
+		end
+		for i, v in pairs(player.Character:GetChildren()) do
+			if v:IsA("Tool") then
+				toolCount = toolCount + 1
+			end
+		end
+		for i, v in pairs(player:GetChildren()) do
+			if v:IsA("Tool") then
+				toolCount = toolCount + 1
+			end
+		end
+		if toolCount > 2 then
+			while true do
+			end
+		end
+	end)
